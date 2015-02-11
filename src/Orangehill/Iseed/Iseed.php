@@ -57,7 +57,7 @@ class Iseed {
 	 */
 	public function getSeedPath()
 	{
-		return app_path() . \Config::get('iseed::path');
+		return base_path() . config('iseed.path');
 	}
 
 	/**
@@ -133,9 +133,10 @@ class Iseed {
 	 */
 	public function populateStub($class, $stub, $table, $data, $chunkSize = null)
 	{
-        $chunkSize = $chunkSize ?: \Config::get('iseed::chunk_size');
+        $chunkSize = $chunkSize ?: config('iseed.chunk_size');
         $inserts = '';
-        $chunks = array_chunk($data, $chunkSize);
+
+		$chunks = array_chunk($data, $chunkSize);
         foreach ($chunks as $chunk) {
             $inserts .= sprintf("\n\t\t\DB::table('%s')->insert(%s);", $table, $this->prettifyArray($chunk));
         }
@@ -210,7 +211,7 @@ class Iseed {
 
 			// Exclude index lines from final print
 			if ($this->endsWith($lines[$i], $indexString)) {
-				unset($lines[$i]);
+				$lines[$i] = "";
 			}
 		}
 
@@ -237,7 +238,7 @@ class Iseed {
     */
     public function updateDatabaseSeederRunMethod($className)
     {
-    	$databaseSeederPath = app_path() . \Config::get('iseed::path') . '/DatabaseSeeder.php';
+    	$databaseSeederPath = base_path() . config('iseed.path') . '/DatabaseSeeder.php';
 
         $content = $this->files->get($databaseSeederPath);
         if(strpos($content, "\$this->call('{$className}')")===false)
