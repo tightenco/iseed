@@ -175,8 +175,10 @@ class Iseed {
 
 		$inString = false;
 		$tabCount = 3;
+		$indexString = ' => ';
 		for($i = 1; $i < count($lines); $i++) {
 			$lines[$i] = ltrim($lines[$i]);
+
 
 			//Check for closing bracket
 			if(strpos($lines[$i], ')') !== false) {
@@ -205,11 +207,27 @@ class Iseed {
 			if(strpos($lines[$i], '(') !== false) {
 				$tabCount++;
 			}
+
+			// Exclude index lines from final print
+			if ($this->endsWith($lines[$i], $indexString)) {
+				unset($lines[$i]);
+			}
 		}
 
 		$content = implode("\n", $lines);
 
 		return $content;
+	}
+
+	public function endsWith($string, $test) {
+		$strlen = strlen($string);
+		$testlen = strlen($test);
+
+		if ($testlen > $strlen) {
+			return false;
+		}
+
+		return substr_compare($string, $test, $strlen - $testlen, $testlen) === 0;
 	}
 
     /**
