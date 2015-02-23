@@ -1,7 +1,5 @@
 <?php
 
-use DB;
-use Eloquent;
 use Illuminate\Database\Seeder;
 
 class {{class}} extends Seeder {
@@ -14,9 +12,6 @@ class {{class}} extends Seeder {
 	public function run()
 	{
 		Eloquent::unguard();
-
-		//disable foreign key check for this connection before running seeders
-		DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 		DB::table('{{table}}')->truncate();
         {{insert_statements}}
